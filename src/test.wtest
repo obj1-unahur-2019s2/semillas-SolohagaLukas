@@ -1,0 +1,58 @@
+import semillas.*
+import parcelas.*
+
+describe "Plantas" {
+	var menta = new Menta(altura=1, anioDeObtencion=0, horasDeSolTolerancia=0)
+	var menta2 = new Menta(altura=0.3, anioDeObtencion=0, horasDeSolTolerancia=0)
+	var soja = new Soja(altura=0.6, anioDeObtencion=2009, horasDeSolTolerancia=0)
+	var quinoa = new Quinoa(anioDeObtencion=2010, altura=0, horasDeSolTolerancia=12)
+	var quinoa2 = new Quinoa(anioDeObtencion=2001, altura=0, horasDeSolTolerancia=9)
+	var parcela = new Parcela(ancho=20, largo=1, horasDeSolRecibe=8)
+	
+	var sojaParcela = new Soja(altura=2, horasDeSolTolerancia=9, anioDeObtencion=0)
+	var sojaParcela2 = new Soja(altura=2, horasDeSolTolerancia=9, anioDeObtencion=0)
+	var sojaParcela3 = new Soja(altura=2, horasDeSolTolerancia=9, anioDeObtencion=0)
+	var sojaParcela4 = new Soja(altura=2, horasDeSolTolerancia=9, anioDeObtencion=0)
+	var sojaParcela5 = new Soja(altura=2, horasDeSolTolerancia=9, anioDeObtencion=0)
+	
+	var hierbabuena = new Hierbabuena(altura=1, anioDeObtencion=0, horasDeSolTolerancia=0)
+	var sojatrans = new SojaTransgenica(altura=0.6, anioDeObtencion=2009, horasDeSolTolerancia=0)
+	var parcelaSoja = new Parcela(ancho=5, largo=1, horasDeSolRecibe=0)
+	
+	
+	test "Menta" {
+		assert.that(menta.daNuevasSemillas())
+		assert.notThat(menta2.daNuevasSemillas())
+		assert.equals(0.9, menta2.espacio())
+	}
+	test "Soja" {
+		assert.equals(7, soja.horasDeSolTolerancia())
+		assert.notThat(soja.daNuevasSemillas())
+		assert.equals(0.3, soja.espacio())
+	}
+	test "Quinoa" {
+		assert.that(quinoa.daNuevasSemillas())
+		assert.that(quinoa2.daNuevasSemillas())
+	}
+	test "Parcelas" {
+		assert.equals(20, parcela.superficie())
+		assert.equals(4, parcela.cantidadMaxima())
+		
+		parcela.plantarPlanta(sojaParcela)
+		parcela.plantarPlanta(sojaParcela2)
+		parcela.plantarPlanta(sojaParcela3)
+		parcela.plantarPlanta(sojaParcela4)
+		
+		assert.notThat(parcela.tieneComplicaciones())
+		assert.throwsException{parcela.plantarPlanta(sojaParcela5)}
+	}
+	test "Parcelas Ideales" {
+		assert.that(menta.esIdeal(parcela))
+		assert.that(hierbabuena.esIdeal(parcela))
+		assert.that(soja.esIdeal(parcelaSoja))
+		assert.that(sojatrans.esIdeal(parcelaSoja))
+		parcela.plantarPlanta(menta)
+		assert.that(quinoa.esIdeal(parcela))
+	}
+}
+
